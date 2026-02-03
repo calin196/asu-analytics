@@ -2,22 +2,23 @@ import "../styles/dashboard.css";
 import logo from "../assets/asu-logo.png";
 
 export function Dashboard() {
- const scrollToAuth = () => {
-  const authSection = document.querySelector(".dashboard-right");
-  if (authSection) {
-    authSection.scrollIntoView({ behavior: "smooth" });
-  }
-};
+  const scrollToAuth = () => {
+    const auth = document.querySelector(".dashboard-right");
+    if (auth) {
+      auth.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <div className="dashboard-root">
       <div className="dashboard-container">
-        {/* HERO / LOGO */}
+        {/* LEFT */}
         <div className="dashboard-left">
           <div className="logo-wrapper">
             <img src={logo} alt="ASU Analytics Logo" />
           </div>
 
+          {/* MOBILE ONLY */}
           <h2 className="hero-title">ASU Analytics</h2>
 
           <p className="hero-subtitle">
@@ -29,7 +30,7 @@ export function Dashboard() {
           </button>
         </div>
 
-        {/* AUTH */}
+        {/* RIGHT */}
         <div className="dashboard-right">
           <div className="auth-card">
             <h1>
