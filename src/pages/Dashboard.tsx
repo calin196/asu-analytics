@@ -10,6 +10,9 @@ export function Dashboard() {
           <div className="logo-wrapper">
             <img src={logo} alt="ASU Analytics Logo" />
           </div>
+
+          {/* MOBILE ONLY */}
+          <div className="mobile-welcome">Welcome back</div>
         </div>
 
         {/* RIGHT: AUTH */}

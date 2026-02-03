@@ -1,7 +1,7 @@
 /* ROOT */
 .dashboard-root {
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
 
   height: 100vh;
   width: 100vw;
@@ -47,6 +47,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+}
+
+/* MOBILE WELCOME (hidden by default) */
+.mobile-welcome {
+  display: none;
 }
 
 /* LOGO BOX */
@@ -72,7 +78,7 @@
 .logo-wrapper img {
   width: 150%;
   height: 150%;
-  object-fit: contain;
+  object-fit: cover;
   pointer-events: none;
 }
 
@@ -158,16 +164,31 @@
   color: #e6f1f3;
 }
 
-/* MOBILE */
+/* MOBILE LAYOUT */
 @media (max-width: 768px) {
   .dashboard-container {
     flex-direction: column;
-    gap: 48px;
+    gap: 0;
+    padding-top: 80px;
   }
 
   .logo-wrapper {
     width: 220px;
     height: 220px;
+  }
+
+  .mobile-welcome {
+    display: block;
+    margin-top: 24px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #00f5d4;
+    text-shadow: 0 0 12px rgba(0, 245, 212, 0.6);
+  }
+
+  .dashboard-right {
+    margin-top: 140px;
+    width: 100%;
   }
 
   .auth-card {
