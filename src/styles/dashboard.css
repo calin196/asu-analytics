@@ -1,6 +1,7 @@
 /* ROOT */
 .dashboard-root {
   position: relative;
+  overflow-x: hidden;   /* LOCK horizontal scroll */
   overflow-y: auto;
 
   height: 100vh;
@@ -10,6 +11,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
   color: #e6f1f3;
   font-family: Inter, system-ui, sans-serif;
 }
@@ -45,13 +47,15 @@
 /* LEFT */
 .dashboard-left {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-/* MOBILE WELCOME (hidden by default) */
-.mobile-welcome {
+/* HERO ELEMENTS (hidden by default) */
+.hero-title,
+.hero-subtitle,
+.hero-btn {
   display: none;
 }
 
@@ -76,8 +80,8 @@
 
 /* LOGO IMAGE */
 .logo-wrapper img {
-  width: 150%;
-  height: 150%;
+  width: 140%;
+  height: 140%;
   object-fit: cover;
   pointer-events: none;
 }
@@ -129,7 +133,6 @@
   font-size: 0.95rem;
   cursor: pointer;
   border: none;
-  transition: background 0.2s ease;
 }
 
 .btn.primary {
@@ -164,12 +167,22 @@
   color: #e6f1f3;
 }
 
-/* MOBILE LAYOUT */
+/* ===================== */
+/* MOBILE HERO + AUTH    */
+/* ===================== */
 @media (max-width: 768px) {
+
   .dashboard-container {
     flex-direction: column;
     gap: 0;
-    padding-top: 80px;
+  }
+
+  /* HERO SECTION */
+  .dashboard-left {
+    min-height: 100vh;
+    width: 100%;
+    padding-top: 18vh;  /* logo slightly above center */
+    box-sizing: border-box;
   }
 
   .logo-wrapper {
@@ -177,18 +190,44 @@
     height: 220px;
   }
 
-  .mobile-welcome {
+  .hero-title,
+  .hero-subtitle,
+  .hero-btn {
     display: block;
-    margin-top: 24px;
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: #00f5d4;
-    text-shadow: 0 0 12px rgba(0, 245, 212, 0.6);
+    text-align: center;
   }
 
+  .hero-title {
+    margin-top: 28px;
+    font-size: 1.6rem;
+    color: #00f5d4;
+  }
+
+  .hero-subtitle {
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: #9fbcbc;
+    max-width: 280px;
+  }
+
+  .hero-btn {
+    margin-top: 32px;
+    padding: 14px 32px;
+    border-radius: 999px;
+    background: #00f5d4;
+    color: #05080b;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 0 20px rgba(0, 245, 212, 0.8);
+  }
+
+  /* AUTH SECTION */
   .dashboard-right {
-    margin-top: 140px;
+    min-height: 100vh;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .auth-card {
@@ -199,16 +238,7 @@
 
 /* ANIMATION */
 @keyframes pulseGlow {
-  0% {
-    transform: scale(1);
-    opacity: 0.65;
-  }
-  50% {
-    transform: scale(1.08);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0.65;
-  }
+  0% { transform: scale(1); opacity: 0.65; }
+  50% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.65; }
 }

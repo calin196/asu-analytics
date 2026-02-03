@@ -2,20 +2,34 @@ import "../styles/dashboard.css";
 import logo from "../assets/asu-logo.png";
 
 export function Dashboard() {
+ const scrollToAuth = () => {
+  const authSection = document.querySelector(".dashboard-right");
+  if (authSection) {
+    authSection.scrollIntoView({ behavior: "smooth" });
+  }
+};
+
   return (
     <div className="dashboard-root">
       <div className="dashboard-container">
-        {/* LEFT: LOGO */}
+        {/* HERO / LOGO */}
         <div className="dashboard-left">
           <div className="logo-wrapper">
             <img src={logo} alt="ASU Analytics Logo" />
           </div>
 
-          {/* MOBILE ONLY */}
-          <div className="mobile-welcome">Welcome back</div>
+          <h2 className="hero-title">ASU Analytics</h2>
+
+          <p className="hero-subtitle">
+            A developing app for tracking stocks and cryptocurrencies
+          </p>
+
+          <button className="hero-btn" onClick={scrollToAuth}>
+            Continue
+          </button>
         </div>
 
-        {/* RIGHT: AUTH */}
+        {/* AUTH */}
         <div className="dashboard-right">
           <div className="auth-card">
             <h1>
