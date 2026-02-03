@@ -168,7 +168,7 @@
   .dashboard-left {
     min-height: 150vh;        /* 🔥 hero height */
     width: 100%;
-    padding-top: 70vh;       /* logo lower than top */
+    padding-top: 100vh;       /* logo lower than top */
     padding-bottom: 22vh;
     box-sizing: border-box;
   }
