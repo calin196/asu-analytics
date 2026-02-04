@@ -274,3 +274,50 @@
   font-size: 0.95rem;
   margin-bottom: 12px;
 }
+/* ===== DEBUG BACKGROUND LAYER (YOU MUST SEE THIS) ===== */
+/* ===== VISIBLE AMBIENT MOTION (FINAL) ===== */
+/* ===============================
+   AURORA BACKGROUND
+================================ */
+.dashboard-root::before {
+  content: "";
+  position: fixed;
+  inset: -25%;
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      100deg,
+      transparent 0%,
+      rgba(0, 245, 212, 0.35) 20%,
+      rgba(120, 200, 255, 0.28) 35%,
+      rgba(0, 245, 212, 0.25) 50%,
+      transparent 65%
+    ),
+    linear-gradient(
+      260deg,
+      transparent 10%,
+      rgba(0, 180, 160, 0.25) 30%,
+      rgba(80, 160, 255, 0.22) 45%,
+      transparent 60%
+    );
+
+  /* LESS blur = more structure */
+  filter: blur(45px);
+  opacity: 0.55;
+
+  animation: auroraCurtain 32s ease-in-out infinite;
+}
+
+@keyframes auroraCurtain {
+  0% {
+    transform: translate(-8%, -6%) skewX(0deg);
+  }
+  50% {
+    transform: translate(8%, 4%) skewX(6deg);
+  }
+  100% {
+    transform: translate(-8%, -6%) skewX(0deg);
+  }
+}
