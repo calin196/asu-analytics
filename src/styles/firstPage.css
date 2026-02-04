@@ -1,0 +1,114 @@
+/* ===============================
+   ROOT BACKGROUND
+================================ */
+.first-page-root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: radial-gradient(
+    circle at center,
+    #081414 0%,
+    #05080b 70%
+  );
+}
+
+/* TURQUOISE NEBULA */
+.first-page-root::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+
+  background:
+    radial-gradient(circle at 30% 40%, rgba(0,245,212,0.18), transparent 55%),
+    radial-gradient(circle at 70% 60%, rgba(0,180,160,0.14), transparent 60%);
+
+  filter: blur(160px);
+  animation: nebulaFloat 180s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes nebulaFloat {
+  0%   { transform: translate(0%, 0%) scale(1); }
+  50%  { transform: translate(-3%, -2%) scale(1.05); }
+  100% { transform: translate(3%, 2%) scale(1); }
+}
+
+/* ===============================
+   PLANET SYSTEM
+================================ */
+.planet-system {
+  position: relative;
+  width: 900px;
+  height: 900px;
+  z-index: 1;
+  filter: drop-shadow(0 0 80px rgba(0,245,212,0.15));
+}
+
+/* ===============================
+   PLANET (ROTATES AGAIN ✅)
+================================ */
+.planet {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+
+  animation: planetRotate 260s linear infinite;
+}
+
+@keyframes planetRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ===============================
+   ORBIT CONTAINER (CENTER)
+================================ */
+.orbit-js {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+ 
+}
+
+/* ===============================
+   BUTTONS (STABLE)
+================================ */
+.orbit-btn {
+  position: absolute;
+  transform: translate(0,0);
+
+  padding: 20px 34px;
+  font-size: 17px;
+  font-weight: 600;
+
+  border-radius: 999px;
+  border: 1px solid rgba(0, 245, 212, 0.35);
+  background: rgba(8, 20, 20, 0.8);
+  color: #eafffb;
+
+  white-space: nowrap;
+  cursor: pointer;
+
+   box-shadow:
+    0 0 10px rgba(132, 46, 27, 0.28),   /* inner soft glow */
+    0 0 22px rgba(132, 46, 27, 0.18),   /* outer soft glow */
+    inset 0 0 8px rgba(60, 20, 12, 0.45); /* dark brick depth */
+
+  transition: scale 0.25s ease, box-shadow 0.25s ease;
+}
+
+.orbit-btn:hover {
+  scale: 1.12;
+   box-shadow:
+    0 0 10px rgba(132, 46, 27, 0.28),   /* inner soft glow */
+    0 0 22px rgba(132, 46, 27, 0.18),   /* outer soft glow */
+    inset 0 0 8px rgba(60, 20, 12, 0.45); /* dark brick depth */
+}

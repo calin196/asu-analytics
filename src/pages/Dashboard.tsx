@@ -1,7 +1,10 @@
 import "../styles/dashboard.css";
 import logo from "../assets/asu-logo.png";
+import { useNavigate } from "react-router-dom";
 
 export function Dashboard() {
+  const navigate = useNavigate();
+
   const scrollToAuth = () => {
     const auth = document.querySelector(".dashboard-right");
     if (auth) {
@@ -12,16 +15,14 @@ export function Dashboard() {
   return (
     <div className="dashboard-root">
       <div className="dashboard-container">
-        {/* LEFT */}
+        {/* LEFT / HERO */}
         <div className="dashboard-left">
           <div className="logo-wrapper">
             <img src={logo} alt="ASU Analytics Logo" />
           </div>
 
-          {/* MOBILE ONLY */}
-
           <p className="hero-subtitle">
-            An early-stage platform for tracking cryptocurrencies, stocks, and market trends.
+            Track cryptocurrencies, stocks, and key market insights — all in one place.
           </p>
 
           <button className="hero-btn" onClick={scrollToAuth}>
@@ -29,7 +30,7 @@ export function Dashboard() {
           </button>
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT / AUTH */}
         <div className="dashboard-right">
           <div className="auth-card">
             <h1>
@@ -39,7 +40,14 @@ export function Dashboard() {
 
             <button className="btn primary">Login</button>
             <button className="btn secondary">Register</button>
-            <button className="btn ghost">Continue as guest</button>
+
+            {/* GUEST FLOW */}
+            <button
+              className="btn ghost"
+              onClick={() => navigate("/guest")}
+            >
+              Continue as guest
+            </button>
           </div>
         </div>
       </div>
