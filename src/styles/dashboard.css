@@ -242,3 +242,41 @@
     opacity: 0.65;
   }
 }
+
+/* ===============================
+   MOBILE BLOCK OVERLAY
+================================ */
+
+.mobile-block-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-block-card {
+  background: rgba(10, 20, 25, 0.95);
+  padding: 28px;
+  border-radius: 18px;
+  max-width: 320px;
+  text-align: center;
+
+  box-shadow: 0 0 40px rgba(0, 245, 212, 0.45);
+}
+
+.mobile-block-card h2 {
+  color: #00f5d4;
+  margin-bottom: 12px;
+}
+
+.mobile-block-card p {
+  color: #9fbcbc;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
