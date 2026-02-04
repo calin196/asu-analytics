@@ -19,10 +19,9 @@ export function Dashboard() {
           </div>
 
           {/* MOBILE ONLY */}
-          <h2 className="hero-title">ASU Analytics</h2>
 
           <p className="hero-subtitle">
-            A developing app for tracking stocks and cryptocurrencies
+            An early-stage platform for tracking cryptocurrencies, stocks, and market trends.
           </p>
 
           <button className="hero-btn" onClick={scrollToAuth}>
