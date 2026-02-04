@@ -80,8 +80,8 @@
 
 /* LOGO IMAGE */
 .logo-wrapper img {
-  width: 150%;
-  height: 150%;
+  width: 140%;
+  height: 140%;
   object-fit: cover;
   pointer-events: none;
 }
