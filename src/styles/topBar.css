@@ -96,3 +96,62 @@
 .topbar-nav a:hover::after {
   width: 100%;
 }
+/* EXIT BUTTON — SAME EFFECT AS LINKS, BUT RED */
+
+.topbar-exit {
+  position: relative;
+  background: none;
+  border: none;
+  color: #ff4d4d;
+  cursor: pointer;
+  padding: 6px 4px;
+  font-size: 0.95rem;
+}
+
+/* red underline (same animation as links) */
+.topbar-exit::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: #ff4d4d;
+  transition: width 0.25s ease;
+}
+
+.topbar-exit:hover::after {
+  width: 100%;
+}
+
+/* kill the ugly hover box */
+.topbar-exit:hover {
+  background: none;
+}
+
+/* ===============================
+   TOPBAR COMPACT — 16:9 / SHORT SCREENS
+================================ */
+
+@media (max-height: 950px) {
+  .topbar {
+    height: 70px;        /* 🔥 shorter bar */
+    padding: 0 32px;
+    gap: 64px;           /* tighter spacing */
+  }
+
+  .topbar-logo {
+    width: 120px;        /* 🔥 smaller logo */
+    height: 120px;
+    margin-top: 0;
+  }
+
+  .topbar-brand {
+    font-size: 1rem;
+  }
+
+  .topbar-nav a,
+  .topbar-exit {
+    font-size: 0.9rem;
+  }
+}

@@ -14,13 +14,13 @@
 }
 
 /* ===============================
-   EARTH IMAGE (ANIMATED IN)
+   EARTH IMAGE
 ================================ */
 
 .earth-image {
   position: absolute;
 
-  /* START (OFF-SCREEN) */
+  /* ORIGINAL POSITION (16:10 LOOK) */
   bottom: -500px;
   left: 390px;
 
@@ -30,11 +30,10 @@
 
   opacity: 0;
 
-  transform: none;
-
   transition:
     bottom 1.4s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 1s ease-out;
+    opacity 1s ease-out,
+    width 0.3s ease-out;
 
   pointer-events: none;
   user-select: none;
@@ -44,12 +43,12 @@
 
 /* FINAL EARTH POSITION */
 .first-page-root.enter .earth-image {
-  bottom: 0px;
+  bottom: 0;
   opacity: 1;
 }
 
 /* ===============================
-   TEXT ABOVE EARTH (ANIMATED)
+   TEXT ABOVE EARTH
 ================================ */
 
 .earth-text {
@@ -60,6 +59,10 @@
   transform: translateX(-50%) translateY(-20px);
   opacity: 0;
 
+  width: 100%;
+  max-width: 880px;
+  padding: 0 24px;
+
   text-align: center;
   z-index: 2;
   pointer-events: none;
@@ -69,7 +72,6 @@
     transform 0.8s ease-out;
 }
 
-/* FINAL TEXT STATE */
 .first-page-root.enter .earth-text {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
@@ -97,4 +99,63 @@
   font-size: 1.05rem;
   color: #9fbcbc;
   letter-spacing: 0.04em;
+}
+
+/* ===== REAL FIX — OVERRIDE FINAL STATE ===== */
+
+/* ===== SOFT FIX — JUST A LITTLE PUSH DOWN ===== */
+
+/* ===== SOFT HEIGHT TUNING ===== */
+
+/* ===== FINAL BALANCE FIX ===== */
+
+@media (max-height: 950px) {
+     .top-bar {
+    height: 52px;
+    padding: 0 24px;
+  }
+
+  
+  /* text slightly smaller */
+  .earth-text h1 {
+    font-size: clamp(1.9rem, 3.5vw, 3rem);
+     bottom: 100%; 
+  }
+
+  .earth-text p {
+    font-size: 0.98rem;
+  }
+
+  /* planet slightly lower */
+  .first-page-root.enter .earth-image {
+    bottom: -100px !important;
+  }
+}
+
+@media (max-height: 900px) {
+  .earth-text h1 {
+    font-size: clamp(1.75rem, 3.2vw, 2.8rem);
+  }
+
+  .earth-text p {
+    font-size: 0.95rem;
+  }
+
+  .first-page-root.enter .earth-image {
+    bottom: -220px !important;
+  }
+}
+
+@media (max-height: 850px) {
+  .earth-text h1 {
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
+  }
+
+  .earth-text p {
+    font-size: 0.92rem;
+  }
+
+  .first-page-root.enter .earth-image {
+    bottom: -280px !important;
+  }
 }
