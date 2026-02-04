@@ -13,19 +13,19 @@ const items = [
   "Insights",
   "Settings",
   "Exit",
-];
+]
 
 export function FirstPage() {
   const orbitRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let angle = 0;
-    const radius = 480;
+    const radius = 500;
     const speed = 0.00035;
 
     // 👇 VISUAL CENTER CORRECTION
     const offsetX = -70; // move orbit LEFT
-    const offsetY = -40; // move orbit UP
+    const offsetY = -30; // move orbit UP
 
     function animate() {
       if (!orbitRef.current) return;

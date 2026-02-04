@@ -48,6 +48,7 @@
   height: 900px;
   z-index: 1;
   filter: drop-shadow(0 0 80px rgba(0,245,212,0.15));
+  transform: translateX(-400px);
 }
 
 /* ===============================
@@ -59,7 +60,7 @@
   border-radius: 50%;
   display: block;
 
-  animation: planetRotate 260s linear infinite;
+  animation: planetRotate 150s linear infinite;
 }
 
 @keyframes planetRotate {
@@ -83,9 +84,10 @@
 ================================ */
 .orbit-btn {
   position: absolute;
-  transform: translate(0,0);
-
-  padding: 20px 34px;
+  transform: translate(0, 0);
+font-family: "Orbitron", system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   font-size: 17px;
   font-weight: 600;
 
@@ -97,18 +99,47 @@
   white-space: nowrap;
   cursor: pointer;
 
-   box-shadow:
-    0 0 10px rgba(132, 46, 27, 0.28),   /* inner soft glow */
-    0 0 22px rgba(132, 46, 27, 0.18),   /* outer soft glow */
-    inset 0 0 8px rgba(60, 20, 12, 0.45); /* dark brick depth */
+  /* IMPORTANT */
+  isolation: isolate;
+  overflow: visible;
 
-  transition: scale 0.25s ease, box-shadow 0.25s ease;
+  /* keep ONLY subtle inner depth */
+  box-shadow:
+    inset 0 0 8px rgba(60, 20, 12, 0.45);
+
+  transition: scale 0.25s ease;
 }
 
+/* 🔴 OUTER GLOW LAYER (THIS IS THE KEY) */
+.orbit-btn::before {
+  content: "";
+  position: absolute;
+
+  /* 🔴 MUCH CLOSER TO THE BUTTON */
+  inset: -5px;              /* was -14px → closer wrap */
+
+  border-radius: inherit;
+  z-index: -1;
+
+  box-shadow:
+    /* tight, bright edge */
+    0 0 10px rgba(132, 46, 27, 0.75),
+
+    /* medium halo */
+    0 0 26px rgba(132, 46, 27, 0.55),
+
+    /* soft outer falloff */
+    0 0 48px rgba(132, 46, 27, 0.35);
+}
+
+/* 🔥 Hover */
 .orbit-btn:hover {
   scale: 1.12;
-   box-shadow:
-    0 0 10px rgba(132, 46, 27, 0.28),   /* inner soft glow */
-    0 0 22px rgba(132, 46, 27, 0.18),   /* outer soft glow */
-    inset 0 0 8px rgba(60, 20, 12, 0.45); /* dark brick depth */
+}
+
+.orbit-btn:hover::before {
+  box-shadow:
+    0 0 16px rgba(132, 46, 27, 0.95),
+    0 0 40px rgba(132, 46, 27, 0.75),
+    0 0 70px rgba(132, 46, 27, 0.55);
 }
