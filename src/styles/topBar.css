@@ -1,0 +1,98 @@
+/* ===============================
+   TOP BAR (SINGLE SOURCE OF TRUTH)
+================================ */
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 96px; /* 🔥 tall enough for big logo */
+  padding: 0 48px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 8, 11, 0.95),
+    rgba(5, 8, 11, 0.85)
+  );
+
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+  display: flex;
+  align-items: center;
+  gap: 120px; /* space between logo + nav */
+
+  z-index: 100;
+}
+
+/* ===============================
+   LEFT SIDE (LOGO + BRAND)
+================================ */
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar-logo {
+  width: 180px;   /* 🔥 BIG LOGO */
+  height: 180px;
+  object-fit: contain;
+  margin-top: 10px;
+
+  filter: drop-shadow(0 0 14px rgba(0, 245, 212, 0.85));
+}
+
+.topbar-brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
+  color: #e6f1f3;
+  white-space: nowrap;
+}
+
+/* ===============================
+   NAVIGATION
+================================ */
+
+.topbar-nav {
+  flex: 1; /* take remaining width */
+  display: flex;
+  justify-content: space-evenly; /* 🔥 spread across bar */
+  align-items: center;
+}
+
+/* base link */
+.topbar-nav a,
+.topbar-nav a:visited {
+  color: #e6f1f3; /* 🔥 white by default */
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.25s ease;
+}
+
+/* hover color */
+.topbar-nav a:hover {
+  color: #00f5d4;
+}
+
+/* underline hover effect */
+.topbar-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 0%;
+  height: 2px;
+  background: #00f5d4;
+  transition: width 0.25s ease;
+}
+
+.topbar-nav a:hover::after {
+  width: 100%;
+}

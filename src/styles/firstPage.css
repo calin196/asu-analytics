@@ -1,145 +1,70 @@
-/* ===============================
-   ROOT BACKGROUND
-================================ */
 .first-page-root {
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
-  position: relative;
+  padding-top: 88px; /* match topbar height */
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  overflow: hidden;
 
   background: radial-gradient(
     circle at center,
-    #081414 0%,
-    #05080b 70%
+    #1a1a1a 0%,
+    #0a0a0a 65%,
+    #000000 100%
   );
 }
 
-/* TURQUOISE NEBULA */
-.first-page-root::before {
-  content: "";
+/* ===============================
+   EARTH IMAGE (BOTTOM CENTER)
+================================ */
+
+.earth-image {
   position: absolute;
-  inset: -30%;
-
-  background:
-    radial-gradient(circle at 30% 40%, rgba(0,245,212,0.18), transparent 55%),
-    radial-gradient(circle at 70% 60%, rgba(0,180,160,0.14), transparent 60%);
-
-  filter: blur(160px);
-  animation: nebulaFloat 180s ease-in-out infinite alternate;
-  z-index: 0;
-}
-
-@keyframes nebulaFloat {
-  0%   { transform: translate(0%, 0%) scale(1); }
-  50%  { transform: translate(-3%, -2%) scale(1.05); }
-  100% { transform: translate(3%, 2%) scale(1); }
-}
-
-/* ===============================
-   PLANET SYSTEM
-================================ */
-.planet-system {
-  position: relative;
-  width: 900px;
-  height: 900px;
-  z-index: 1;
-  filter: drop-shadow(0 0 80px rgba(0,245,212,0.15));
-  transform: translateX(-400px);
-}
-
-/* ===============================
-   PLANET (ROTATES AGAIN ✅)
-================================ */
-.planet {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  display: block;
-
-  animation: planetRotate 150s linear infinite;
-}
-
-@keyframes planetRotate {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-/* ===============================
-   ORBIT CONTAINER (CENTER)
-================================ */
-.orbit-js {
-  position: absolute;
-  top: 50%;
+  bottom: 7%;              /* push it slightly off-screen */
   left: 50%;
+  transform: translateX(-50%);
 
- 
+  width: 70vw;               /* responsive */
+  max-width: 1100px;
+  min-width: 600px;
+
+  pointer-events: none;      /* purely visual */
+  user-select: none;
+
+  filter:
+    drop-shadow(0 -20px 60px rgba(0, 0, 0, 0.9));
 }
 
 /* ===============================
-   BUTTONS (STABLE)
+   TEXT ABOVE EARTH
 ================================ */
-.orbit-btn {
+
+.earth-text {
   position: absolute;
-  transform: translate(0, 0);
-font-family: "Orbitron", system-ui, sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  font-size: 17px;
-  font-weight: 600;
+  bottom: 60%;              /* 🔥 sits above the Earth */
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
 
-  border-radius: 999px;
-  border: 1px solid rgba(0, 245, 212, 0.35);
-  background: rgba(8, 20, 20, 0.8);
-  color: #eafffb;
-
-  white-space: nowrap;
-  cursor: pointer;
-
-  /* IMPORTANT */
-  isolation: isolate;
-  overflow: visible;
-
-  /* keep ONLY subtle inner depth */
-  box-shadow:
-    inset 0 0 8px rgba(60, 20, 12, 0.45);
-
-  transition: scale 0.25s ease;
+  z-index: 2;
+  pointer-events: none;
 }
 
-/* 🔴 OUTER GLOW LAYER (THIS IS THE KEY) */
-.orbit-btn::before {
-  content: "";
-  position: absolute;
-
-  /* 🔴 MUCH CLOSER TO THE BUTTON */
-  inset: -5px;              /* was -14px → closer wrap */
-
-  border-radius: inherit;
-  z-index: -1;
-
-  box-shadow:
-    /* tight, bright edge */
-    0 0 10px rgba(132, 46, 27, 0.75),
-
-    /* medium halo */
-    0 0 26px rgba(132, 46, 27, 0.55),
-
-    /* soft outer falloff */
-    0 0 48px rgba(132, 46, 27, 0.35);
+.earth-text h1 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  color: #e6f1f3;
+  line-height: 1.2;
+  margin-bottom: 16px;
 }
 
-/* 🔥 Hover */
-.orbit-btn:hover {
-  scale: 1.12;
+.earth-text h1 span {
+  color: #00f5d4; /* turquoise emphasis */
+  text-shadow: 0 0 20px rgba(0, 245, 212, 0.6);
 }
 
-.orbit-btn:hover::before {
-  box-shadow:
-    0 0 16px rgba(132, 46, 27, 0.95),
-    0 0 40px rgba(132, 46, 27, 0.75),
-    0 0 70px rgba(132, 46, 27, 0.55);
+.earth-text p {
+  font-size: 1.05rem;
+  color: #9fbcbc;
+  letter-spacing: 0.04em;
 }

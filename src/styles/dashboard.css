@@ -6,7 +6,9 @@
 
   height: 100vh;
   width: 100vw;
-  background: #05080b;
+
+  /* ✅ ONLY CHANGE IS HERE */
+  background: #2b2b2b; /* dark neutral grey */
 
   display: flex;
   justify-content: center;
@@ -16,7 +18,7 @@
   font-family: Inter, system-ui, sans-serif;
 }
 
-/* PULSING BACKGROUND GLOW */
+/* PULSING BACKGROUND GLOW — UNCHANGED */
 .dashboard-root::before {
   content: "";
   position: absolute;
@@ -158,22 +160,19 @@
 
 @media (max-width: 768px) {
 
-  /* stack layout */
   .dashboard-container {
     flex-direction: column;
     gap: 0;
   }
 
-  /* HERO = dashboard-left */
   .dashboard-left {
-    min-height: 160vh;        /* 🔥 hero height */
+    min-height: 160vh;
     width: 100%;
-    padding-top: 100vh;       /* logo lower than top */
+    padding-top: 100vh;
     padding-bottom: 22vh;
     box-sizing: border-box;
   }
 
-  /* show hero elements */
   .hero-title,
   .hero-subtitle,
   .hero-btn {
@@ -209,7 +208,6 @@
     box-shadow: 0 0 24px rgba(0, 245, 212, 0.8);
   }
 
-  /* AUTH SECTION — pushed below hero */
   .dashboard-right {
     min-height: 100vh;
     width: 100%;
@@ -223,7 +221,6 @@
     max-width: 360px;
   }
 
-  /* logo size safety on small phones */
   .logo-wrapper {
     width: 200px;
     height: 200px;
