@@ -48,7 +48,7 @@
   align-items: center;
   justify-content: center;
 
-  transform: translateY(-30px); /* 🔼 move logo up */
+  transform: translateY(0px); /* 🔼 move logo up */
 }
 
 /* HERO ELEMENTS — OFF BY DEFAULT */
@@ -63,8 +63,8 @@
 ================================ */
 .logo-wrapper {
   
-  width: 420px;          /* was 320 */
-  height: 420px;         /* was 320 */
+  width: 380px;          /* was 320 */
+  height: 380px;         /* was 320 */
 
   border-radius: 28px;
 
