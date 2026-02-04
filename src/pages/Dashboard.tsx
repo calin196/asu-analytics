@@ -70,7 +70,7 @@ export function Dashboard() {
               ASU Analytics is designed for large screens and
               professional data analysis.
             </p>
-            <p>Please use a desktop or laptop.</p>
+            <p>купи себе ноутбук, Броки</p>
 
             <button
               className="btn primary"
