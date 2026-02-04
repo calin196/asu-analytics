@@ -132,30 +132,3 @@
   }
 }
 
-@media (max-height: 900px) {
-  .earth-text h1 {
-    font-size: clamp(1.75rem, 3.2vw, 2.8rem);
-  }
-
-  .earth-text p {
-    font-size: 0.95rem;
-  }
-
-  .first-page-root.enter .earth-image {
-    bottom: -220px !important;
-  }
-}
-
-@media (max-height: 850px) {
-  .earth-text h1 {
-    font-size: clamp(1.6rem, 3vw, 2.6rem);
-  }
-
-  .earth-text p {
-    font-size: 0.92rem;
-  }
-
-  .first-page-root.enter .earth-image {
-    bottom: -280px !important;
-  }
-}
