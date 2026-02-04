@@ -1,7 +1,6 @@
 .first-page-root {
   width: 100vw;
   height: 100vh;
-  padding-top: 88px; /* match topbar height */
 
   position: relative;
   overflow: hidden;
@@ -15,40 +14,71 @@
 }
 
 /* ===============================
-   EARTH IMAGE (BOTTOM CENTER)
+   EARTH IMAGE (ANIMATED IN)
 ================================ */
 
 .earth-image {
   position: absolute;
-  bottom: 7%;              /* push it slightly off-screen */
-  left: 50%;
-  transform: translateX(-50%);
 
-  width: 70vw;               /* responsive */
-  max-width: 1100px;
-  min-width: 600px;
+  /* START (OFF-SCREEN) */
+  bottom: -500px;
+  left: 390px;
 
-  pointer-events: none;      /* purely visual */
+  width: 80vw;
+  max-width: 1200px;
+  min-width: 700px;
+
+  opacity: 0;
+
+  transform: none;
+
+  transition:
+    bottom 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 1s ease-out;
+
+  pointer-events: none;
   user-select: none;
 
-  filter:
-    drop-shadow(0 -20px 60px rgba(0, 0, 0, 0.9));
+  filter: drop-shadow(0 -20px 60px rgba(0, 0, 0, 0.9));
+}
+
+/* FINAL EARTH POSITION */
+.first-page-root.enter .earth-image {
+  bottom: 0px;
+  opacity: 1;
 }
 
 /* ===============================
-   TEXT ABOVE EARTH
+   TEXT ABOVE EARTH (ANIMATED)
 ================================ */
 
 .earth-text {
   position: absolute;
-  bottom: 60%;              /* 🔥 sits above the Earth */
+  bottom: 60%;
   left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
 
+  transform: translateX(-50%) translateY(-20px);
+  opacity: 0;
+
+  text-align: center;
   z-index: 2;
   pointer-events: none;
+
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
 }
+
+/* FINAL TEXT STATE */
+.first-page-root.enter .earth-text {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  transition-delay: 0.6s;
+}
+
+/* ===============================
+   TEXT STYLING
+================================ */
 
 .earth-text h1 {
   font-size: clamp(2rem, 4vw, 3.2rem);
@@ -59,7 +89,7 @@
 }
 
 .earth-text h1 span {
-  color: #00f5d4; /* turquoise emphasis */
+  color: #00f5d4;
   text-shadow: 0 0 20px rgba(0, 245, 212, 0.6);
 }
 

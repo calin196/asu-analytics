@@ -1,10 +1,20 @@
+import { useEffect, useState } from "react";
 import "../styles/firstPage.css";
 import { TopBar } from "../components/TopBar";
 import earthImg from "../assets/earth.png";
 
 export function FirstPage() {
+  const [enter, setEnter] = useState(false);
+
+  useEffect(() => {
+    // trigger animation after mount
+    requestAnimationFrame(() => {
+      setEnter(true);
+    });
+  }, []);
+
   return (
-    <div className="first-page-root">
+    <div className={`first-page-root ${enter ? "enter" : ""}`}>
       <TopBar />
 
       {/* HERO MESSAGE */}
