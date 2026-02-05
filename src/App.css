@@ -1,5 +1,5 @@
 /* =========================================
-   RESET BAD VITE DEFAULTS
+   RESET
 ========================================= */
 
 #root {
@@ -10,7 +10,7 @@
 }
 
 /* =========================================
-   GLOBAL VIEWPORT WRAPPER
+   APP WRAPPERS (NO LAYOUT INTERFERENCE)
 ========================================= */
 
 .app-viewport {
@@ -19,37 +19,17 @@
   overflow: hidden;
 }
 
-/* =========================================
-   GLOBAL SCALE SYSTEM
-========================================= */
-
-:root {
-  --ui-scale: 1;
-}
-
 .app-scale {
   width: 100%;
   height: 100%;
-  transform: scale(var(--ui-scale));
-  transform-origin: center bottom;
+  /* 🔥 DISABLE SCALING – THIS WAS BREAKING EVERYTHING */
+  transform: none;
 }
+/* ===============================
+   DISABLE SCALE WHEN DASHBOARD IS PRESENT
+================================ */
 
-/* =========================================
-   ASPECT / HEIGHT NORMALIZATION
-========================================= */
-
-/* 16:9 laptops, shorter viewports */
-@media (max-height: 900px) {
-  :root {
-    --ui-scale: 0.92;
-  }
+/* If dashboard is rendered, kill scaling */
+.app-scale:has(.dashboard-root) {
+  transform: none !important;
 }
-
-/* Optional future-proofing */
-/*
-@media (min-aspect-ratio: 21/9) {
-  :root {
-    --ui-scale: 0.88;
-  }
-}
-*/

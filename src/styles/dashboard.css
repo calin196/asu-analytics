@@ -3,13 +3,11 @@
 ================================ */
 .dashboard-root {
   position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden;
 
   height: 100vh;
   width: 100vw;
 
-  /* PURE BLACK + SLIGHT DEPTH */
   background: linear-gradient(
     to bottom,
     #05080b 0%,
@@ -26,58 +24,50 @@
 }
 
 /* ===============================
-   MAIN LAYOUT — DESKTOP
+   MAIN LAYOUT
 ================================ */
 .dashboard-container {
+  transform: translateY(-90px);
   position: relative;
   z-index: 1;
 
   display: flex;
-  gap: 260px;
+  flex-direction: row;
+  flex-wrap: nowrap;   /* ✅ IMPORTANT */
   align-items: center;
+  justify-content: center;
 
-  transform: translateY(-30px); /* stops floating-in-space feeling */
+  width: 100%;
+  max-width: 1200px;
+  gap: 300px;
 }
+
 
 /* ===============================
    LEFT (LOGO)
 ================================ */
 .dashboard-left {
+  flex: 0 0 auto;
+
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  transform: translateY(0px); /* 🔼 move logo up */
 }
 
-/* HERO ELEMENTS — OFF BY DEFAULT */
-.hero-title,
-.hero-subtitle,
-.hero-btn {
-  display: none;
-}
 
-/* ===============================
-   LOGO BOX — SUBTLE, PREMIUM
-================================ */
 .logo-wrapper {
-  
-  width: 380px;          /* was 320 */
-  height: 380px;         /* was 320 */
-
+  width: 380px;
+  height: 380px;
   border-radius: 28px;
 
   background: rgba(5, 8, 11, 0.96);
-
-  box-shadow:
-    0 14px 70px rgba(0, 0, 0, 0.9); /* depth, not glow */
+  box-shadow: 0 14px 70px rgba(0, 0, 0, 0.9);
 
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+
   overflow: hidden;
-  
 }
 
 .logo-wrapper img {
@@ -91,24 +81,21 @@
    RIGHT (AUTH)
 ================================ */
 .dashboard-right {
+  flex: 0 0 auto;
+
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
-/* ===============================
-   AUTH CARD — TRUSTED LOOK
-================================ */
+
 .auth-card {
   width: 360px;
   padding: 32px;
   border-radius: 18px;
 
   background: rgba(10, 20, 25, 0.85);
-
-  /* DARK SHADOW, NO GLOW */
-  box-shadow:
-    0 12px 60px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 12px 60px rgba(0, 0, 0, 0.85);
 
   text-align: center;
 }
@@ -129,12 +116,13 @@
 }
 
 /* ===============================
-   BUTTONS — CLEAN, SERIOUS
+   BUTTONS
 ================================ */
 .btn {
   width: 100%;
   padding: 12px;
   margin-bottom: 12px;
+
   border-radius: 10px;
   font-size: 0.95rem;
   cursor: pointer;
@@ -166,116 +154,6 @@
   color: #8fafb3;
 }
 
-/* =================================================
-   MOBILE ONLY
-================================================= */
-@media (max-width: 768px) {
-
-  .dashboard-container {
-    flex-direction: column;
-    gap: 0;
-    transform: none;
-  }
-
-  .dashboard-left {
-    min-height: 160vh;
-    width: 100%;
-    padding-top: 100vh;
-    padding-bottom: 22vh;
-    box-sizing: border-box;
-  }
-
-  .hero-title,
-  .hero-subtitle,
-  .hero-btn {
-    display: block;
-    text-align: center;
-  }
-
-  .hero-title {
-    margin-top: 28px;
-    font-size: 1.6rem;
-    color: #00f5d4;
-  }
-
-  .hero-subtitle {
-    margin-top: 12px;
-    font-size: 0.95rem;
-    color: #9fbcbc;
-    max-width: 300px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .hero-btn {
-    margin-top: 36px;
-    padding: 14px 36px;
-    border-radius: 999px;
-
-    background: #00f5d4;
-    color: #05080b;
-    font-weight: 600;
-    border: none;
-  }
-
-  .dashboard-right {
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .auth-card {
-    width: 90%;
-    max-width: 360px;
-  }
-
-  .logo-wrapper {
-    width: 200px;
-    height: 200px;
-  }
-}
-
-/* ===============================
-   MOBILE BLOCK OVERLAY
-================================ */
-.mobile-block-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(6px);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.mobile-block-card {
-  background: rgba(10, 20, 25, 0.95);
-  padding: 28px;
-  border-radius: 18px;
-  max-width: 320px;
-  text-align: center;
-
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mobile-block-card h2 {
-  color: #00f5d4;
-  margin-bottom: 12px;
-}
-
-.mobile-block-card p {
-  color: #9fbcbc;
-  font-size: 0.95rem;
-  margin-bottom: 12px;
-}
-/* ===== DEBUG BACKGROUND LAYER (YOU MUST SEE THIS) ===== */
-/* ===== VISIBLE AMBIENT MOTION (FINAL) ===== */
 /* ===============================
    AURORA BACKGROUND
 ================================ */
@@ -303,7 +181,6 @@
       transparent 60%
     );
 
-  /* LESS blur = more structure */
   filter: blur(45px);
   opacity: 0.55;
 
@@ -320,4 +197,26 @@
   100% {
     transform: translate(-8%, -6%) skewX(0deg);
   }
+}
+
+/* ===============================
+   FIX: DISABLE GLOBAL SCALING FOR DASHBOARD
+   (DO NOT REMOVE)
+================================ */
+
+/* stop parent scaling from collapsing layout */
+.app-scale {
+  transform: none !important;
+}
+
+/* ensure dashboard uses full real width */
+.dashboard-root {
+  width: 100vw;
+  max-width: none;
+}
+
+.dashboard-container {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
 }
