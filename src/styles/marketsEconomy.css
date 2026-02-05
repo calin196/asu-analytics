@@ -1,43 +1,208 @@
-/* src/styles/marketsEconomy.css */
-
-.economy-root {
-  padding: 40px;
-  color: #e6f1f3;
+/* ===== GLOBAL ===== */
+html, body, #root {
+  height: 100%;
 }
 
-.country-select {
-  margin-top: 20px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  background: #05080b;
-  color: #e6f1f3;
-  border: 1px solid rgba(0, 245, 212, 0.4);
+/* ===== DASHBOARD ===== */
+.dashboard-screen {
+  height: calc(100vh - 90px);
+  display: flex;
+  justify-content: center;
 }
 
-.loading {
-  margin-top: 20px;
-  color: #9fbcbc;
+.dashboard-container {
+  width: 100%;
+  max-width: 3200px;
+  height: 100%;
+  padding: 170px 12px 16px;
+  display: flex;
+  flex-direction: column;
 }
 
-.kpi-grid {
-  margin-top: 40px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+/* ===== HEADER ===== */
+
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #00f5d4;
+  font-size: 18px;
 }
 
-.kpi-card {
-  background: rgba(10, 20, 25, 0.85);
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 0 25px rgba(0, 245, 212, 0.25);
-}
-
-.kpi-card h3 {
-  margin-bottom: 10px;
+.dashboard-title {
+  font-size: 42px;
+  margin: 0;
   color: #00f5d4;
 }
 
-.kpi-card p {
-  font-size: 1.2rem;
+.header-date {
+  font-size: 18px;
+}
+
+/* ===== MAIN ===== */
+.dashboard-main {
+  height: calc(100% - 80px);
+  display: flex;
+  gap: 100px;
+}
+
+/* ===== KPI ===== */
+.kpi-column {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.kpi {
+  background: rgba(10,20,25,0.9);
+  padding: 14px 16px;
+  border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 18px;
+}
+
+.kpi-divider {
+  height: 1px;
+  
+  background: rgba(255,255,255,0.2);
+}
+
+/* ===== CHARTS ===== */
+.charts-area {
+  width: 1000;
+  display: flex;
+  gap: 32px;
+}
+
+/* LEFT + RIGHT COLUMNS */
+.charts-col {
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ===== FIXED SIZES ===== */
+
+/* PIE (BIG) */
+.charts-col:first-child .chart-box:first-child {
+  height: 360px;
+  width: 600px;
+}
+
+/* OTHER LEFT CHARTS */
+.charts-col:first-child .chart-box:not(:first-child) {
+  height: 360px;
+  width: 600px;
+}
+
+/* RIGHT COLUMN CHARTS */
+.charts-col:last-child .chart-box {
+  height: 360px;
+  width: 600px;
+}
+
+/* ===== CHART BOX ===== */
+.chart-box {
+  background: rgba(8,18,22,0.95);
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 22px rgba(0, 245, 212, 0.35);
+}
+
+.chart-box h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #e6f1f3;
+}
+
+.chart-inner {
+  flex: 1;
+}
+/* ===== COUNTRY SELECT (ORIGINAL, WORKING) ===== */
+.country-select-screen {
+  height: calc(100vh - 90px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.country-select-screen h2 {
+  margin-bottom: 24px;
+  font-size: 32px;
+  color: #00f5d4;
+}
+
+.country-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.country-btn.big {
+  height: 64px;
+  font-size: 18px;
+}
+
+.kpi-back-btn {
+  margin-left: 100px;   /* 👈 move right by EXACT amount */
+  margin-bottom: 16px;
+  
+}
+
+/* ===== COUNTRY SELECT BUTTONS — SAME AS TOPBAR LINKS ===== */
+/* ===== COUNTRY SELECT BUTTONS — BOXED + TOPBAR HOVER ===== */
+/* ===== COUNTRY SELECT BUTTONS — GREY BOX + UNDERLINE ONLY ===== */
+.country-btn.big {
+  background: transparent;                 /* ❌ no fill */
+  border: 1px solid rgba(180, 180, 180, 0.5); /* ✅ simple grey box */
+  border-radius: 12px;
+
+  height: 64px;
+  padding: 0 20px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #e6f1f3;
+  font-size: 18px;
+  font-weight: 500;
+
+  cursor: pointer;
+  position: relative;
+
+  transition: color 0.25s ease;
+}
+
+/* text color on hover */
+.country-btn.big:hover {
+  color: #00f5d4;
+}
+
+/* underline (ONLY EFFECT) */
+.country-btn.big::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+
+  width: 0%;
+  height: 2px;
+  background: #00f5d4;
+
+  transition: width 0.25s ease;
+}
+
+/* underline on hover */
+.country-btn.big:hover::after {
+  width: 60%;
 }

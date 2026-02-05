@@ -1,0 +1,39 @@
+.nav-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+
+  color: #e6f1f3;
+  font-size: 1.1rem;
+  font-weight: 500;
+
+  cursor: pointer;
+  position: relative;
+
+  /* 🔥 THIS IS THE KEY */
+  display: inline-block;
+  width: fit-content;
+
+  transition: color 0.25s ease;
+}
+
+.nav-link-btn:hover {
+  color: #00f5d4;
+}
+
+.nav-link-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+
+  width: 0%;
+  height: 2px;
+  background: #00f5d4;
+
+  transition: width 0.25s ease;
+}
+
+.nav-link-btn:hover::after {
+  width: 100%;
+}
