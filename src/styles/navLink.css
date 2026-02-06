@@ -21,19 +21,29 @@
   color: #00f5d4;
 }
 
+.nav-link-btn {
+  padding-bottom: 6px;        /* make space INSIDE */
+}
+
 .nav-link-btn::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: -6px;
-
+  bottom: 0;                 /* 🔥 INSIDE the button */
   width: 0%;
   height: 2px;
   background: #00f5d4;
-
   transition: width 0.25s ease;
 }
 
 .nav-link-btn:hover::after {
   width: 100%;
+}
+ 
+
+.nav-link-btn:hover::after {
+  width: 100%;
+}
+.nav-link-btn {
+  overflow: visible;   /* ADD THIS */
 }

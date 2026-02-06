@@ -5,6 +5,7 @@ html, body, #root {
 
 /* ===== DASHBOARD ===== */
 .dashboard-screen {
+  
   height: calc(100vh - 90px);
   display: flex;
   justify-content: center;
@@ -22,12 +23,7 @@ html, body, #root {
 /* ===== HEADER ===== */
 
 
-.back-btn {
-  background: none;
-  border: none;
-  color: #00f5d4;
-  font-size: 18px;
-}
+
 
 .dashboard-title {
   font-size: 42px;
@@ -52,6 +48,7 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  overflow: visible;
 }
 
 .kpi {
@@ -125,6 +122,7 @@ html, body, #root {
 }
 /* ===== COUNTRY SELECT (ORIGINAL, WORKING) ===== */
 .country-select-screen {
+    padding-top: 60px; 
   height: calc(100vh - 90px);
   display: flex;
   flex-direction: column;
@@ -152,10 +150,12 @@ html, body, #root {
 }
 
 .kpi-back-btn {
-  margin-left: 100px;   /* 👈 move right by EXACT amount */
-  margin-bottom: 16px;
-  
+  margin-left: 100px;
+
+  margin-top: 30px;     /* space after TopBar */
+  margin-bottom: 50px;  /* space before KPIs */
 }
+
 
 /* ===== COUNTRY SELECT BUTTONS — SAME AS TOPBAR LINKS ===== */
 /* ===== COUNTRY SELECT BUTTONS — BOXED + TOPBAR HOVER ===== */
@@ -205,4 +205,8 @@ html, body, #root {
 /* underline on hover */
 .country-btn.big:hover::after {
   width: 60%;
+}
+.kpi-column .nav-link-btn {
+  margin-top: 48px;
+  margin-left: 10px;   /* push button down */
 }
