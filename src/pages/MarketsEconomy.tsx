@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { TopBar } from "../components/TopBar";
 import { NavLinkButton } from "../components/NavLinkButton1";
 import "../styles/navLink.css";
-import { useNavigate } from "react-router-dom";
-
 
 import {
   fetchEurostat,
@@ -40,10 +38,11 @@ type Country = {
 
 type SectorDatum = {
   name: string;
-  value: number; // ALWAYS percent
+  value: number; // percent
 };
 
 export function MarketsEconomy() {
+  const [enter, setEnter] = useState(false);
 
   const [countries, setCountries] = useState<Country[]>([]);
   const [country, setCountry] = useState<string | null>(null);
@@ -56,6 +55,18 @@ export function MarketsEconomy() {
   const [income, setIncome] = useState<any[]>([]);
   const [sectorData, setSectorData] = useState<SectorDatum[]>([]);
   const [loading, setLoading] = useState(false);
+
+  /* ===============================
+     RE-TRIGGER SELECTOR ANIMATION
+  =============================== */
+  useEffect(() => {
+    if (view === "select") {
+      setEnter(false); // reset animation
+      requestAnimationFrame(() => {
+        setEnter(true); // trigger again
+      });
+    }
+  }, [view]);
 
   /* ===============================
      LOAD COUNTRIES
@@ -95,7 +106,6 @@ export function MarketsEconomy() {
         setPopulation(parseTimeSeries(p));
         setIncome(parseTimeSeries(inc));
 
-        /* 🔥 NORMALIZE SECTOR DATA (THE REAL FIX) */
         const raw = sector
           .filter((s: any) => s.value != null)
           .map((s: any) => ({
@@ -132,11 +142,12 @@ export function MarketsEconomy() {
      RENDER
   =============================== */
   return (
-    <div className="first-page-root">
+    <div className={`first-page-root ${enter ? "enter" : ""}`}>
       <TopBar />
 
+      {/* ===== COUNTRY SELECT ===== */}
       {view === "select" && (
-        <div className="country-select-screen">
+        <div className="country-select-screen country-enter">
           <h2>Select a country</h2>
           <div className="country-grid">
             {countries.map((c) => (
@@ -155,65 +166,52 @@ export function MarketsEconomy() {
         </div>
       )}
 
+      {/* ===== DASHBOARD ===== */}
       {view === "dashboard" && country && (
         <div className="dashboard-screen">
-          <div className="dashboard-container">
-            <div className="dashboard-main">
+          {loading && (
+            <div className="loading-overlay">
+              <div className="loading-spinner" />
+              <div className="loading-text">Loading country data…</div>
+            </div>
+          )}
 
-              {/* KPI COLUMN */}
-              <div className="kpi-column">
-                
+          {!loading && (
+            <div className="dashboard-container">
+              <div className="dashboard-main">
 
-                <KPI label="GDP" value={`${latest(gdp)?.toLocaleString()} €`} />
-                <KPI
-                  label="GDP / capita"
-                  value={`${Math.round(gdpPerCapita || 0).toLocaleString()} €`}
-                />
-                <KPI label="Population" value={latest(population)?.toLocaleString()} />
-                <KPI label="Median income" value={`${latest(income)?.toLocaleString()} €`} />
-                <KPI label="Inflation" value={`${latest(inflation)} %`} />
-                <KPI label="Unemployment" value={`${latest(unemployment)} %`} />
-                <KPI label="EU" value={market?.isEU ? "Yes" : "No"} />
-                <KPI label="Eurozone" value={market?.isEurozone ? "Yes" : "No"} />
-                <KPI label="Single Market" value={market?.inSingleMarket ? "Yes" : "No"} />
-                <NavLinkButton
-                  onClick={() => {
-                    setCountry(null);
-                    setView("select");
-                  }}
-                >
-                  ← Back to countries
-                </NavLinkButton>
+                <div className="kpi-column">
+                  <KPI label="GDP" value={`${latest(gdp)?.toLocaleString()} €`} />
+                  <KPI label="GDP / capita" value={`${Math.round(gdpPerCapita || 0).toLocaleString()} €`} />
+                  <KPI label="Population" value={latest(population)?.toLocaleString()} />
+                  <KPI label="Median income" value={`${latest(income)?.toLocaleString()} €`} />
+                  <KPI label="Inflation" value={`${latest(inflation)} %`} />
+                  <KPI label="Unemployment" value={`${latest(unemployment)} %`} />
+                  <KPI label="EU" value={market?.isEU ? "Yes" : "No"} />
+                  <KPI label="Eurozone" value={market?.isEurozone ? "Yes" : "No"} />
+                  <KPI label="Single Market" value={market?.inSingleMarket ? "Yes" : "No"} />
 
+                  <NavLinkButton
+                    onClick={() => {
+                      setCountry(null);
+                      setView("select");
+                    }}
+                  >
+                    ← Back to countries
+                  </NavLinkButton>
+                </div>
 
-              </div>
-
-              {!loading && (
                 <div className="charts-area">
                   <div className="charts-col">
                     <ChartBox title="Economic structure">
                       <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
-                          <Pie
-                            data={sectorData}
-                            dataKey="value"
-                            nameKey="name"
-                            outerRadius={120}
-                            labelLine={false}
-                          >
+                          <Pie data={sectorData} dataKey="value" nameKey="name" outerRadius={120} labelLine={false}>
                             {sectorData.map((_, i) => (
-                              <Cell
-                                key={i}
-                                fill={["#00f5d4", "#4cc9f0", "#4895ef"][i % 3]}
-                              />
+                              <Cell key={i} fill={["#00f5d4", "#4cc9f0", "#4895ef"][i % 3]} />
                             ))}
                           </Pie>
-
-                          <Tooltip
-                            formatter={(value) =>
-                              `${Number(value).toFixed(1)} %`
-                            }
-                          />
+                          <Tooltip formatter={(v) => `${Number(v).toFixed(1)} %`} />
                           <Legend />
                         </PieChart>
                       </ResponsiveContainer>
@@ -229,10 +227,10 @@ export function MarketsEconomy() {
                     <Chart title="Median income" data={income} />
                   </div>
                 </div>
-              )}
 
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>
@@ -260,26 +258,14 @@ function Chart({ title, data }: { title: string; data: any[] }) {
           <XAxis dataKey="time" />
           <YAxis />
           <Tooltip />
-          <Line
-            type="monotone"
-            dataKey="value"
-            stroke="#00f5d4"
-            strokeWidth={3}
-            dot={false}
-          />
+          <Line type="monotone" dataKey="value" stroke="#00f5d4" strokeWidth={3} dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </ChartBox>
   );
 }
 
-function ChartBox({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+function ChartBox({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="chart-box">
       <h3>{title}</h3>
