@@ -1,7 +1,7 @@
 .nav-link-btn {
   background: none;
   border: none;
-  padding: 0;
+  padding: 0 0 6px 0;          /* space for underline */
 
   color: #e6f1f3;
   font-size: 1.1rem;
@@ -10,40 +10,41 @@
   cursor: pointer;
   position: relative;
 
-  /* 🔥 THIS IS THE KEY */
   display: inline-block;
   width: fit-content;
 
   transition: color 0.25s ease;
+
+  outline: none;               /* ❌ remove white focus box */
+  box-shadow: none;            /* ❌ just in case */
+  -webkit-tap-highlight-color: transparent; /* ❌ mobile flash */
+}
+
+.nav-link-btn:focus {
+  outline: none;
 }
 
 .nav-link-btn:hover {
   color: #00f5d4;
 }
 
-.nav-link-btn {
-  padding-bottom: 6px;        /* make space INSIDE */
-}
-
 .nav-link-btn::after {
   content: "";
   position: absolute;
   left: 0;
-  bottom: 0;                 /* 🔥 INSIDE the button */
+  bottom: 0;
+
   width: 0%;
   height: 2px;
   background: #00f5d4;
+
   transition: width 0.25s ease;
 }
 
 .nav-link-btn:hover::after {
   width: 100%;
 }
- 
 
-.nav-link-btn:hover::after {
-  width: 100%;
-}
 .nav-link-btn {
-  overflow: visible;   /* ADD THIS */
+  overflow: visible;
 }

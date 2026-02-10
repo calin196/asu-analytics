@@ -148,7 +148,7 @@ export function MarketsEconomy() {
       {/* ===== COUNTRY SELECT ===== */}
       {view === "select" && (
         <div className="country-select-screen country-enter">
-          <h2>Select a country</h2>
+          
           <div className="country-grid">
             {countries.map((c) => (
               <button

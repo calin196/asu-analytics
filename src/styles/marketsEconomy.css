@@ -8,13 +8,16 @@ html, body, #root {
   height: calc(100vh - 90px);
   display: flex;
   justify-content: center;
+
+  position: relative; /* 👈 IMPORTANT */
 }
+
 
 .dashboard-container {
   width: 100%;
   max-width: 3200px;
   height: 100%;
-  padding: 170px 12px 16px;
+  padding: 24px 12px 16px;
   display: flex;
   flex-direction: column;
 }
@@ -32,6 +35,7 @@ html, body, #root {
 
 /* ===== MAIN ===== */
 .dashboard-main {
+  margin-top: 250px;
   height: calc(100% - 80px);
   display: flex;
   gap: 100px;
@@ -134,16 +138,17 @@ html, body, #root {
   width: 100%;
 }
 
-.country-btn.big {
-  height: 64px;
-  font-size: 18px;
-}
+
 
 /* ===== COUNTRY BUTTONS ===== */
 .country-btn.big {
+  height: 64px;
   background: transparent;
-  border: 1px solid rgba(180, 180, 180, 0.5);
-  border-radius: 12px;
+
+  border: none;            /* ❌ remove box */
+  outline: none;           /* ❌ remove focus ring */
+  box-shadow: none;        /* ❌ just in case */
+
   padding: 0 20px;
 
   display: inline-flex;
@@ -157,6 +162,12 @@ html, body, #root {
   cursor: pointer;
   position: relative;
   transition: color 0.25s ease;
+
+  -webkit-tap-highlight-color: transparent; /* ❌ mobile click flash */
+}
+
+.country-btn.big:focus {
+  outline: none;
 }
 
 .country-btn.big:hover {
@@ -179,6 +190,7 @@ html, body, #root {
   width: 60%;
 }
 
+
 /* ===== BACK BUTTON ===== */
 .kpi-column .nav-link-btn {
   margin-top: 48px;
@@ -187,17 +199,26 @@ html, body, #root {
 
 /* ===== LOADING OVERLAY ===== */
 .loading-overlay {
-  position: fixed;
-  inset: 0;
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100vh;      /* 👈 THIS */
+  min-height: 100%;
+
   background: rgba(5, 8, 11, 0.95);
   backdrop-filter: blur(6px);
-  z-index: 999;
+  z-index: 50;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
+
+
 
 .loading-spinner {
   width: 56px;

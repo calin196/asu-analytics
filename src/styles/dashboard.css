@@ -216,6 +216,7 @@
 }
 
 .dashboard-container {
+  transform: translateY(-40px);
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: nowrap !important;
