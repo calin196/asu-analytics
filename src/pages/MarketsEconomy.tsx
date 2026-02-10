@@ -38,13 +38,15 @@ type Country = {
 
 type SectorDatum = {
   name: string;
-  value: number; // percent
+  value: number;
 };
 
 export function MarketsEconomy() {
   const [enter, setEnter] = useState(false);
 
   const [countries, setCountries] = useState<Country[]>([]);
+  const [countriesLoading, setCountriesLoading] = useState(true);
+
   const [country, setCountry] = useState<string | null>(null);
   const [view, setView] = useState<"select" | "dashboard">("select");
 
@@ -54,6 +56,7 @@ export function MarketsEconomy() {
   const [population, setPopulation] = useState<any[]>([]);
   const [income, setIncome] = useState<any[]>([]);
   const [sectorData, setSectorData] = useState<SectorDatum[]>([]);
+
   const [loading, setLoading] = useState(false);
 
   /* ===============================
@@ -61,20 +64,23 @@ export function MarketsEconomy() {
   =============================== */
   useEffect(() => {
     if (view === "select") {
-      setEnter(false); // reset animation
+      setEnter(false);
       requestAnimationFrame(() => {
-        setEnter(true); // trigger again
+        setEnter(true);
       });
     }
   }, [view]);
 
   /* ===============================
-     LOAD COUNTRIES
+     LOAD COUNTRIES (PAGE ENTRY)
   =============================== */
   useEffect(() => {
+    setCountriesLoading(true);
+
     fetchEurostat("nama_10_gdp", { unit: "CLV10_MEUR" })
       .then((d) => setCountries(extractCountries(d)))
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => setCountriesLoading(false));
   }, []);
 
   /* ===============================
@@ -115,12 +121,12 @@ export function MarketsEconomy() {
 
         const total = raw.reduce((sum, s) => sum + s.value, 0);
 
-        const normalized: SectorDatum[] = raw.map((s) => ({
-          name: s.name,
-          value: total > 0 ? (s.value / total) * 100 : 0,
-        }));
-
-        setSectorData(normalized);
+        setSectorData(
+          raw.map((s) => ({
+            name: s.name,
+            value: total > 0 ? (s.value / total) * 100 : 0,
+          }))
+        );
       })
       .finally(() => setLoading(false));
   }, [country, view]);
@@ -138,6 +144,10 @@ export function MarketsEconomy() {
 
   const market = country ? getMarketProfile(country) : null;
 
+  const showOverlay =
+    (view === "select" && countriesLoading) ||
+    (view === "dashboard" && loading);
+
   /* ===============================
      RENDER
   =============================== */
@@ -145,10 +155,20 @@ export function MarketsEconomy() {
     <div className={`first-page-root ${enter ? "enter" : ""}`}>
       <TopBar />
 
+      {showOverlay && (
+        <div className="loading-overlay">
+          <div className="loading-spinner" />
+          <div className="loading-text">
+            {view === "select"
+              ? "Loading countries…"
+              : "Loading country data…"}
+          </div>
+        </div>
+      )}
+
       {/* ===== COUNTRY SELECT ===== */}
-      {view === "select" && (
+      {view === "select" && !countriesLoading && (
         <div className="country-select-screen country-enter">
-          
           <div className="country-grid">
             {countries.map((c) => (
               <button
@@ -167,70 +187,85 @@ export function MarketsEconomy() {
       )}
 
       {/* ===== DASHBOARD ===== */}
-      {view === "dashboard" && country && (
+      {view === "dashboard" && country && !loading && (
         <div className="dashboard-screen">
-          {loading && (
-            <div className="loading-overlay">
-              <div className="loading-spinner" />
-              <div className="loading-text">Loading country data…</div>
-            </div>
-          )}
+          <div className="dashboard-container">
+            <div className="dashboard-main">
+              <div className="kpi-column">
+                <KPI label="GDP" value={`${latest(gdp)?.toLocaleString()} €`} />
+                <KPI
+                  label="GDP / capita"
+                  value={`${Math.round(gdpPerCapita || 0).toLocaleString()} €`}
+                />
+                <KPI
+                  label="Population"
+                  value={latest(population)?.toLocaleString()}
+                />
+                <KPI
+                  label="Median income"
+                  value={`${latest(income)?.toLocaleString()} €`}
+                />
+                <KPI label="Inflation" value={`${latest(inflation)} %`} />
+                <KPI label="Unemployment" value={`${latest(unemployment)} %`} />
+                <KPI label="EU" value={market?.isEU ? "Yes" : "No"} />
+                <KPI
+                  label="Eurozone"
+                  value={market?.isEurozone ? "Yes" : "No"}
+                />
+                <KPI
+                  label="Single Market"
+                  value={market?.inSingleMarket ? "Yes" : "No"}
+                />
 
-          {!loading && (
-            <div className="dashboard-container">
-              <div className="dashboard-main">
+                <NavLinkButton
+                  onClick={() => {
+                    setCountry(null);
+                    setView("select");
+                  }}
+                >
+                  ← Back to countries
+                </NavLinkButton>
+              </div>
 
-                <div className="kpi-column">
-                  <KPI label="GDP" value={`${latest(gdp)?.toLocaleString()} €`} />
-                  <KPI label="GDP / capita" value={`${Math.round(gdpPerCapita || 0).toLocaleString()} €`} />
-                  <KPI label="Population" value={latest(population)?.toLocaleString()} />
-                  <KPI label="Median income" value={`${latest(income)?.toLocaleString()} €`} />
-                  <KPI label="Inflation" value={`${latest(inflation)} %`} />
-                  <KPI label="Unemployment" value={`${latest(unemployment)} %`} />
-                  <KPI label="EU" value={market?.isEU ? "Yes" : "No"} />
-                  <KPI label="Eurozone" value={market?.isEurozone ? "Yes" : "No"} />
-                  <KPI label="Single Market" value={market?.inSingleMarket ? "Yes" : "No"} />
+              <div className="charts-area">
+                <div className="charts-col">
+                  <ChartBox title="Economic structure">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={sectorData}
+                          dataKey="value"
+                          nameKey="name"
+                          outerRadius={120}
+                          labelLine={false}
+                        >
+                          {sectorData.map((_, i) => (
+                            <Cell
+                              key={i}
+                              fill={
+                                ["#00f5d4", "#4cc9f0", "#4895ef"][i % 3]
+                              }
+                            />
+                          ))}
+                        </Pie>
+                        <Tooltip formatter={(v) => `${Number(v).toFixed(1)} %`} />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </ChartBox>
 
-                  <NavLinkButton
-                    onClick={() => {
-                      setCountry(null);
-                      setView("select");
-                    }}
-                  >
-                    ← Back to countries
-                  </NavLinkButton>
+                  <Chart title="Unemployment" data={unemployment} />
+                  <Chart title="Population" data={population} />
                 </div>
 
-                <div className="charts-area">
-                  <div className="charts-col">
-                    <ChartBox title="Economic structure">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie data={sectorData} dataKey="value" nameKey="name" outerRadius={120} labelLine={false}>
-                            {sectorData.map((_, i) => (
-                              <Cell key={i} fill={["#00f5d4", "#4cc9f0", "#4895ef"][i % 3]} />
-                            ))}
-                          </Pie>
-                          <Tooltip formatter={(v) => `${Number(v).toFixed(1)} %`} />
-                          <Legend />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </ChartBox>
-
-                    <Chart title="Unemployment" data={unemployment} />
-                    <Chart title="Population" data={population} />
-                  </div>
-
-                  <div className="charts-col">
-                    <Chart title="Inflation" data={inflation} />
-                    <Chart title="GDP" data={gdp} />
-                    <Chart title="Median income" data={income} />
-                  </div>
+                <div className="charts-col">
+                  <Chart title="Inflation" data={inflation} />
+                  <Chart title="GDP" data={gdp} />
+                  <Chart title="Median income" data={income} />
                 </div>
-
               </div>
             </div>
-          )}
+          </div>
         </div>
       )}
     </div>
@@ -258,14 +293,26 @@ function Chart({ title, data }: { title: string; data: any[] }) {
           <XAxis dataKey="time" />
           <YAxis />
           <Tooltip />
-          <Line type="monotone" dataKey="value" stroke="#00f5d4" strokeWidth={3} dot={false} />
+          <Line
+            type="monotone"
+            dataKey="value"
+            stroke="#00f5d4"
+            strokeWidth={3}
+            dot={false}
+          />
         </LineChart>
       </ResponsiveContainer>
     </ChartBox>
   );
 }
 
-function ChartBox({ title, children }: { title: string; children: React.ReactNode }) {
+function ChartBox({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="chart-box">
       <h3>{title}</h3>

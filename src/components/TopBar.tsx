@@ -9,7 +9,7 @@ export function TopBar() {
     <header className="topbar">
       <div
         className="topbar-left"
-        onClick={() => navigate("/guest")}   // logo → FirstPage
+        onClick={() => navigate("/guest")}
         style={{ cursor: "pointer" }}
       >
         <img src={logo} alt="ASU Analytics" className="topbar-logo" />
@@ -17,28 +17,16 @@ export function TopBar() {
       </div>
 
       <nav className="topbar-nav">
-        {/* HOME → FirstPage */}
-        <NavLink to="/guest">
-          Home
-        </NavLink>
+        <NavLink to="/guest">Home</NavLink>
 
-        <NavLink to="/markets/economy">
-          Markets
-        </NavLink>
+        <NavLink to="/markets/economy">Markets</NavLink>
 
-        <NavLink to="/crypto">
-          Crypto
-        </NavLink>
+        <NavLink to="/markets/crypto">Crypto</NavLink> {/* 👈 FIXED */}
 
-        <NavLink to="/stocks">
-          Stocks
-        </NavLink>
+        <NavLink to="/stocks">Stocks</NavLink>
 
-        <NavLink to="/exchanges">
-          Exchanges
-        </NavLink>
+        <NavLink to="/exchanges">Exchanges</NavLink>
 
-        {/* 🚪 EXIT → Dashboard */}
         <button
           className="topbar-exit"
           onClick={() => navigate("/")}
