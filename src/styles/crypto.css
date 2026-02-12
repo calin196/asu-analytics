@@ -1,27 +1,30 @@
-/* ===============================
-   ROOT
-================================ */
 .crypto-root {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-
-  background: radial-gradient(
-    circle at center,
-    #1a1a1a 0%,
-    #0a0a0a 65%,
-    #000000 100%
-  );
+  background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 65%, #000);
 }
 
-/* ===============================
-   LAYOUT
-================================ */
+/* ===== LAYOUT ===== */
 .crypto-layout {
-  
+  position: relative; /* REQUIRED */
   display: flex;
-  height: calc(100vh - 70px); /* TopBar height */
+  height: calc(100vh - 70px);
   padding-top: 70px;
+}
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
 }
 
 /* ===============================
@@ -259,21 +262,5 @@
   position: relative; /* 👈 REQUIRED */
 }
 
-.loading-overlay {
-  position: absolute;
 
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  background: rgba(5, 8, 11, 0.95);
-  backdrop-filter: blur(6px);
-  z-index: 50;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
 

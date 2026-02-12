@@ -59,7 +59,6 @@ export function Crypto() {
   const [coinLoading, setCoinLoading] = useState(false);
 
   const candleRef = useRef<HTMLDivElement>(null);
-  const chartRef = useRef<ReturnType<typeof createChart> | null>(null);
 
   /* ===============================
      LOAD LIST (PAGE ENTRY)
@@ -91,12 +90,17 @@ export function Crypto() {
   }, []);
 
   /* ===============================
-     LOAD COIN DATA (FIXED)
+     LOAD COIN DATA (RESET FIRST)
   =============================== */
   useEffect(() => {
     if (!selected) return;
 
-    let alive = true; // 👈 IMPORTANT
+    let alive = true;
+
+    // 🔥 clear previous data → forces refresh
+    setCapData([]);
+    setVolumeData([]);
+    setCandleData([]);
 
     setCoinLoading(true);
 
@@ -117,18 +121,19 @@ export function Crypto() {
       });
 
     return () => {
-      alive = false; // 👈 cancel outdated request
+      alive = false;
     };
   }, [selected?.id, period]);
 
   /* ===============================
-     CANDLE CHART (SAFE)
+     CANDLE CHART (SAFE REBUILD)
   =============================== */
   useEffect(() => {
     if (!candleRef.current) return;
     if (candleData.length === 0) return;
 
-    chartRef.current?.remove();
+    // clear container to avoid leftovers
+    candleRef.current.innerHTML = "";
 
     const chart = createChart(candleRef.current, {
       layout: {
@@ -138,8 +143,6 @@ export function Crypto() {
       width: candleRef.current.clientWidth,
       height: candleRef.current.clientHeight,
     });
-
-    chartRef.current = chart;
 
     const series = chart.addSeries(CandlestickSeries, {
       upColor: "#00f5d4",
@@ -159,7 +162,9 @@ export function Crypto() {
 
     chart.timeScale().fitContent();
 
-    return () => chart.remove();
+    return () => {
+      chart.remove();
+    };
   }, [candleData]);
 
   return (
