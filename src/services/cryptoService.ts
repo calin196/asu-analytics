@@ -27,26 +27,15 @@ export type CryptoHistoryResponse = {
 };
 
 /* ===============================
-   SAFE FETCH HELPER
+   SAFE FETCH
 ================================ */
 async function safeFetch<T>(url: string): Promise<T | null> {
   try {
     const res = await fetch(url);
 
-    // 🚫 Rate limited or blocked
-    if (res.status === 429) {
-      console.warn("CoinGecko rate limit hit");
-      return null;
-    }
-
-    if (!res.ok) {
-      console.error("API error:", res.status);
-      return null;
-    }
-
+    if (res.status === 429 || !res.ok) return null;
     return await res.json();
-  } catch (err) {
-    console.error("Network error:", err);
+  } catch {
     return null;
   }
 }
@@ -83,9 +72,5 @@ export function parseSeries(
   series?: [number, number][]
 ): ChartPoint[] {
   if (!series) return [];
-
-  return series.map(([time, value]) => ({
-    time,
-    value,
-  }));
+  return series.map(([time, value]) => ({ time, value }));
 }
