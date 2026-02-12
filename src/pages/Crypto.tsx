@@ -49,80 +49,86 @@ const formatNumber = (v: number) =>
 export function Crypto() {
   const [cryptos, setCryptos] = useState<CryptoMarket[]>([]);
   const [selected, setSelected] = useState<CryptoMarket | null>(null);
-  const [period, setPeriod] = useState<number>(30);
+  const [period] = useState<number>(30);
 
   const [capData, setCapData] = useState<ChartPoint[]>([]);
   const [volumeData, setVolumeData] = useState<ChartPoint[]>([]);
   const [candleData, setCandleData] = useState<any[]>([]);
 
+  const [listLoading, setListLoading] = useState(true);
+  const [coinLoading, setCoinLoading] = useState(false);
+
   const candleRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<ReturnType<typeof createChart> | null>(null);
 
   /* ===============================
-     LOAD LIST (FILTER COINS WITHOUT CANDLES)
+     LOAD LIST (PAGE ENTRY)
   =============================== */
   useEffect(() => {
-  async function loadCoins() {
-    const data = await fetchTopCryptos(50);
-    if (!data) return;
+    async function loadCoins() {
+      setListLoading(true);
 
-    const supported: CryptoMarket[] = [];
+      const data = await fetchTopCryptos(50);
+      if (!data) {
+        setListLoading(false);
+        return;
+      }
 
-    for (const coin of data) {
-      const ok = await hasCandles(coin.symbol);
-      if (ok) supported.push(coin);
+      const supported: CryptoMarket[] = [];
 
-      // ⏱️ small delay to avoid rate limiting
-      await new Promise((r) => setTimeout(r, 120));
+      for (const coin of data) {
+        const ok = await hasCandles(coin.symbol);
+        if (ok) supported.push(coin);
+        await new Promise((r) => setTimeout(r, 120));
+      }
+
+      setCryptos(supported);
+      setSelected(supported[0] ?? null);
+      setListLoading(false);
     }
 
-    setCryptos(supported);
-    setSelected(supported[0] ?? null);
-  }
-
-  loadCoins();
-}, []);
-
+    loadCoins();
+  }, []);
 
   /* ===============================
-     RESET CHART DATA ON COIN CHANGE
-  =============================== */
-  useEffect(() => {
-    setCapData([]);
-    setVolumeData([]);
-    setCandleData([]);
-  }, [selected?.id]);
-
-  /* ===============================
-     LOAD DATA
+     LOAD COIN DATA (FIXED)
   =============================== */
   useEffect(() => {
     if (!selected) return;
 
-    // Market cap + volume (CoinGecko)
-    fetchCryptoHistory(selected.id, period).then((history) => {
-      if (!history) return;
-      setCapData(parseSeries(history.market_caps));
-      setVolumeData(parseSeries(history.total_volumes));
-    });
+    let alive = true; // 👈 IMPORTANT
 
-    // Candles (CryptoCompare)
-    fetchCandles(selected.symbol, period)
-      .then(setCandleData)
-      .catch(() => setCandleData([]));
+    setCoinLoading(true);
+
+    Promise.all([
+      fetchCryptoHistory(selected.id, period),
+      fetchCandles(selected.symbol, period),
+    ])
+      .then(([history, candles]) => {
+        if (!alive) return;
+        if (!history || !candles || candles.length === 0) return;
+
+        setCapData(parseSeries(history.market_caps));
+        setVolumeData(parseSeries(history.total_volumes));
+        setCandleData(candles);
+      })
+      .finally(() => {
+        if (alive) setCoinLoading(false);
+      });
+
+    return () => {
+      alive = false; // 👈 cancel outdated request
+    };
   }, [selected?.id, period]);
 
   /* ===============================
-     CANDLE CHART
+     CANDLE CHART (SAFE)
   =============================== */
   useEffect(() => {
     if (!candleRef.current) return;
     if (candleData.length === 0) return;
 
-    if (chartRef.current) {
-      chartRef.current.remove();
-      chartRef.current = null;
-    }
+    chartRef.current?.remove();
 
     const chart = createChart(candleRef.current, {
       layout: {
@@ -153,10 +159,7 @@ export function Crypto() {
 
     chart.timeScale().fitContent();
 
-    return () => {
-      chartRef.current?.remove();
-      chartRef.current = null;
-    };
+    return () => chart.remove();
   }, [candleData]);
 
   return (
@@ -164,6 +167,17 @@ export function Crypto() {
       <TopBar />
 
       <div className="crypto-layout">
+        {(listLoading || coinLoading) && (
+          <div className="loading-overlay">
+            <div className="loading-spinner" />
+            <div className="loading-text">
+              {listLoading
+                ? "Loading cryptocurrencies…"
+                : "Loading market data…"}
+            </div>
+          </div>
+        )}
+
         {/* LEFT */}
         <aside className="crypto-list">
           <div className="crypto-scroll">
@@ -189,24 +203,15 @@ export function Crypto() {
 
         {/* RIGHT */}
         <main className="crypto-main">
-          {/* PRICE */}
           <div className="crypto-chart-wrapper">
             <div className="crypto-chart-title">Price</div>
-
-            <div className="crypto-chart large" ref={candleRef}>
-              {candleData.length === 0 && (
-                <div className="crypto-chart">
-                  Loading candles…
-                </div>
-              )}
-            </div>
+            <div className="crypto-chart large" ref={candleRef} />
           </div>
 
-          {/* MARKET CAP */}
           <div className="crypto-chart-wrapper">
             <div className="crypto-chart-title">Market Capitalization</div>
             <ResponsiveContainer width="100%" height={200}>
-              <AreaChart data={capData} key={selected?.id}>
+              <AreaChart data={capData}>
                 <XAxis dataKey="time" tickFormatter={formatDate} />
                 <YAxis tickFormatter={formatNumber} />
                 <Tooltip />
@@ -219,11 +224,10 @@ export function Crypto() {
             </ResponsiveContainer>
           </div>
 
-          {/* VOLUME */}
           <div className="crypto-chart-wrapper">
             <div className="crypto-chart-title">Trading Volume</div>
             <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={volumeData} key={selected?.id}>
+              <BarChart data={volumeData}>
                 <XAxis dataKey="time" tickFormatter={formatDate} />
                 <YAxis tickFormatter={formatNumber} />
                 <Tooltip />
