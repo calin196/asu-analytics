@@ -10,10 +10,7 @@ import {
 
 import { fetchCandles, hasCandles } from "../services/candlesService";
 
-import type {
-  CryptoMarket,
-  ChartPoint,
-} from "../services/cryptoService";
+import type { CryptoMarket, ChartPoint } from "../services/cryptoService";
 
 import {
   ResponsiveContainer,
@@ -57,11 +54,12 @@ export function Crypto() {
 
   const [listLoading, setListLoading] = useState(true);
   const [coinLoading, setCoinLoading] = useState(false);
+  const [hasData, setHasData] = useState(true);
 
   const candleRef = useRef<HTMLDivElement>(null);
 
   /* ===============================
-     LOAD LIST (PAGE ENTRY)
+     LOAD LIST
   =============================== */
   useEffect(() => {
     async function loadCoins() {
@@ -90,19 +88,20 @@ export function Crypto() {
   }, []);
 
   /* ===============================
-     LOAD COIN DATA (RESET FIRST)
+     LOAD COIN DATA (BULLETPROOF)
   =============================== */
   useEffect(() => {
     if (!selected) return;
 
     let alive = true;
 
-    // 🔥 clear previous data → forces refresh
+    setCoinLoading(true);
+    setHasData(true);
+
+    // reset everything immediately
     setCapData([]);
     setVolumeData([]);
     setCandleData([]);
-
-    setCoinLoading(true);
 
     Promise.all([
       fetchCryptoHistory(selected.id, period),
@@ -110,11 +109,20 @@ export function Crypto() {
     ])
       .then(([history, candles]) => {
         if (!alive) return;
-        if (!history || !candles || candles.length === 0) return;
+
+        if (!history || !candles || candles.length === 0) {
+          setHasData(false);
+          return;
+        }
 
         setCapData(parseSeries(history.market_caps));
         setVolumeData(parseSeries(history.total_volumes));
         setCandleData(candles);
+        setHasData(true);
+      })
+      .catch(() => {
+        if (!alive) return;
+        setHasData(false);
       })
       .finally(() => {
         if (alive) setCoinLoading(false);
@@ -126,14 +134,14 @@ export function Crypto() {
   }, [selected?.id, period]);
 
   /* ===============================
-     CANDLE CHART (SAFE REBUILD)
+     CANDLE CHART (NO GHOSTS)
   =============================== */
   useEffect(() => {
     if (!candleRef.current) return;
-    if (candleData.length === 0) return;
 
-    // clear container to avoid leftovers
     candleRef.current.innerHTML = "";
+
+    if (!hasData || candleData.length === 0) return;
 
     const chart = createChart(candleRef.current, {
       layout: {
@@ -162,10 +170,8 @@ export function Crypto() {
 
     chart.timeScale().fitContent();
 
-    return () => {
-      chart.remove();
-    };
-  }, [candleData]);
+    return () => chart.remove();
+  }, [candleData, hasData]);
 
   return (
     <div className="crypto-root">
@@ -208,38 +214,59 @@ export function Crypto() {
 
         {/* RIGHT */}
         <main className="crypto-main">
-          <div className="crypto-chart-wrapper">
-            <div className="crypto-chart-title">Price</div>
-            <div className="crypto-chart large" ref={candleRef} />
-          </div>
+          {!coinLoading && !hasData && (
+            <div
+              style={{
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#8fafb3",
+                fontSize: 15,
+              }}
+            >
+              No market data available for this asset
+            </div>
+          )}
 
-          <div className="crypto-chart-wrapper">
-            <div className="crypto-chart-title">Market Capitalization</div>
-            <ResponsiveContainer width="100%" height={200}>
-              <AreaChart data={capData}>
-                <XAxis dataKey="time" tickFormatter={formatDate} />
-                <YAxis tickFormatter={formatNumber} />
-                <Tooltip />
-                <Area
-                  dataKey="value"
-                  stroke="#4cc9f0"
-                  fill="rgba(76,201,240,0.3)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
+          {hasData && (
+            <>
+              <div className="crypto-chart-wrapper">
+                <div className="crypto-chart-title">Price</div>
+                <div className="crypto-chart large" ref={candleRef} />
+              </div>
 
-          <div className="crypto-chart-wrapper">
-            <div className="crypto-chart-title">Trading Volume</div>
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={volumeData}>
-                <XAxis dataKey="time" tickFormatter={formatDate} />
-                <YAxis tickFormatter={formatNumber} />
-                <Tooltip />
-                <Bar dataKey="value" fill="#4895ef" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+              <div className="crypto-chart-wrapper">
+                <div className="crypto-chart-title">
+                  Market Capitalization
+                </div>
+                <ResponsiveContainer width="100%" height={200}>
+                  <AreaChart data={capData}>
+                    <XAxis dataKey="time" tickFormatter={formatDate} />
+                    <YAxis tickFormatter={formatNumber} />
+                    <Tooltip />
+                    <Area
+                      dataKey="value"
+                      stroke="#4cc9f0"
+                      fill="rgba(76,201,240,0.3)"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="crypto-chart-wrapper">
+                <div className="crypto-chart-title">Trading Volume</div>
+                <ResponsiveContainer width="100%" height={200}>
+                  <BarChart data={volumeData}>
+                    <XAxis dataKey="time" tickFormatter={formatDate} />
+                    <YAxis tickFormatter={formatNumber} />
+                    <Tooltip />
+                    <Bar dataKey="value" fill="#4895ef" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </>
+          )}
         </main>
       </div>
     </div>
